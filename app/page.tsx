@@ -73,6 +73,7 @@ export default function Portfolio() {
   const [mounted, setMounted] = useState(false);
   const [showControlPanel, setShowControlPanel] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
+  const [selectedProject, setSelectedProject] = useState<any>(null);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
@@ -83,7 +84,8 @@ export default function Portfolio() {
     brand: 'صمم موقعك في 48 ساعه',
     contactText: 'تواصل معي',
     viewWorkText: 'رؤية أعمالي',
-    whatsappLink: 'https://wa.me/201234567890'
+    whatsappLink: 'https://wa.me/201234567890',
+    avatar: 'https://picsum.photos/seed/avatar/400/400'
   });
 
   const [projects, setProjects] = useState(initialProjects);
@@ -202,50 +204,77 @@ export default function Portfolio() {
 
       {/* Hero Section */}
       <section id="home" className="relative pt-44 pb-32 px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-sm font-medium mb-8">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              متاح للمشاريع الجديدة
-            </div>
-            
-            <h1 className="text-6xl md:text-8xl font-bold mb-8 tracking-tight leading-[1.1]">
-              نصمم مستقبلك <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 bg-[length:200%_auto] animate-gradient">الرقمي باحترافية</span>
-            </h1>
-            
-            <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-3xl mb-12 leading-relaxed mx-auto">
-              {profile.brand}. نجمع بين دقة التنفيذ وجمال التصميم لنقدم لك موقعاً يعكس قوة علامتك التجارية.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row justify-center gap-5">
-              <motion.a
-                href={profile.whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-2xl shadow-blue-500/30 transition-all flex items-center justify-center gap-3 text-lg"
-              >
-                {profile.contactText}
-                <ArrowUpRight className="w-5 h-5" />
-              </motion.a>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="flex flex-col lg:flex-row items-center gap-16 lg:text-right text-center">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="flex-1 order-2 lg:order-1"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 text-sm font-medium mb-8">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                متاح للمشاريع الجديدة
+              </div>
               
-              <motion.button
-                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-10 py-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl font-bold shadow-xl shadow-zinc-200/50 dark:shadow-none transition-all flex items-center justify-center gap-3 text-lg"
-              >
-                {profile.viewWorkText}
-                <ExternalLink className="w-5 h-5" />
-              </motion.button>
-            </div>
-          </motion.div>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 tracking-tight leading-[1.1]">
+                نصمم مستقبلك <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 bg-[length:200%_auto] animate-gradient">الرقمي باحترافية</span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-2xl mb-12 leading-relaxed lg:ml-0 mx-auto">
+                {profile.brand}. نجمع بين دقة التنفيذ وجمال التصميم لنقدم لك موقعاً يعكس قوة علامتك التجارية.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-5">
+                <motion.a
+                  href={profile.whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-2xl shadow-blue-500/30 transition-all flex items-center justify-center gap-3 text-lg"
+                >
+                  {profile.contactText}
+                  <ArrowUpRight className="w-5 h-5" />
+                </motion.a>
+                
+                <motion.button
+                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-10 py-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl font-bold shadow-xl shadow-zinc-200/50 dark:shadow-none transition-all flex items-center justify-center gap-3 text-lg"
+                >
+                  {profile.viewWorkText}
+                  <ExternalLink className="w-5 h-5" />
+                </motion.button>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: -50 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-64 h-64 md:w-80 md:h-80 lg:w-[450px] lg:h-[450px] order-1 lg:order-2"
+            >
+              <div className="absolute inset-0 bg-blue-600/20 rounded-[3rem] rotate-6 blur-2xl" />
+              <div className="relative w-full h-full rounded-[3rem] overflow-hidden border-4 border-white dark:border-zinc-900 shadow-2xl">
+                <Image 
+                  src={profile.avatar} 
+                  alt={profile.name} 
+                  fill 
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                  priority
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-white dark:bg-zinc-900 rounded-3xl shadow-xl flex items-center justify-center border border-zinc-100 dark:border-zinc-800 animate-bounce">
+                <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white">
+                  <ArrowUpRight className="w-6 h-6" />
+                </div>
+              </div>
+            </motion.div>
+          </div>
 
           <motion.div 
             initial={{ opacity: 0 }}
@@ -303,13 +332,19 @@ export default function Portfolio() {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                    <a 
-                      href={project.link}
+                    <button 
+                      onClick={() => {
+                        if (project.link && project.link !== '#') {
+                          window.open(project.link, '_blank', 'noopener,noreferrer');
+                        } else {
+                          setSelectedProject(project);
+                        }
+                      }}
                       className="w-full py-3 bg-white text-zinc-950 rounded-xl font-bold flex items-center justify-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
                     >
                       عرض المشروع
                       <ArrowUpRight className="w-4 h-4" />
-                    </a>
+                    </button>
                   </div>
                 </div>
                 
@@ -507,6 +542,40 @@ export default function Portfolio() {
                             className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                           />
                         </div>
+
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 uppercase flex items-center gap-1">
+                            الصورة الشخصية
+                            <Tooltip text="صورتك التي تظهر في قسم الترحيب." />
+                          </label>
+                          <div className="flex items-center gap-4">
+                            <div className="relative w-20 h-20 rounded-2xl overflow-hidden border-2 border-zinc-200 dark:border-zinc-800">
+                              <Image src={profile.avatar} alt="Avatar" fill className="object-cover" />
+                            </div>
+                            <button 
+                              onClick={() => document.getElementById('avatar-upload')?.click()}
+                              className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-blue-600 hover:text-white rounded-xl text-sm font-bold transition-all"
+                            >
+                              تغيير الصورة
+                            </button>
+                            <input 
+                              id="avatar-upload"
+                              type="file" 
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                    setProfile({...profile, avatar: reader.result as string});
+                                  };
+                                  reader.readAsDataURL(file);
+                                }
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
                     ) : (
                       <div className="space-y-8">
@@ -570,12 +639,19 @@ export default function Portfolio() {
                               </div>
                             </div>
 
-                            <div className="grid grid-cols-1 gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               <input 
                                 type="text" 
                                 placeholder="الوسوم (مفصولة بفاصلة)"
                                 value={editingProject ? (Array.isArray(editingProject.tags) ? editingProject.tags.join(', ') : editingProject.tags) : newProject.tags}
                                 onChange={(e) => editingProject ? setEditingProject({...editingProject, tags: e.target.value}) : setNewProject({...newProject, tags: e.target.value})}
+                                className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm"
+                              />
+                              <input 
+                                type="text" 
+                                placeholder="رابط المشروع (مثال: https://...)"
+                                value={editingProject ? editingProject.link : newProject.link}
+                                onChange={(e) => editingProject ? setEditingProject({...editingProject, link: e.target.value}) : setNewProject({...newProject, link: e.target.value})}
                                 className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm"
                               />
                             </div>
@@ -685,6 +761,71 @@ export default function Portfolio() {
               )}
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* Project Details Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="absolute inset-0 bg-zinc-950/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-4xl bg-white dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
+            >
+              <button 
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-6 right-6 z-10 p-2 bg-white/10 backdrop-blur-md text-white rounded-full hover:bg-white/20 transition-all"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              <div className="relative w-full md:w-1/2 h-64 md:h-auto">
+                <Image 
+                  src={selectedProject.image} 
+                  alt={selectedProject.title} 
+                  fill 
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+
+              <div className="flex-1 p-8 md:p-12 overflow-y-auto">
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {selectedProject.tags.map((tag: string) => (
+                    <span key={tag} className="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">{selectedProject.title}</h2>
+                <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-8">
+                  {selectedProject.description}
+                </p>
+
+                {selectedProject.link && selectedProject.link !== '#' && (
+                  <a 
+                    href={selectedProject.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-xl shadow-blue-500/20 hover:bg-blue-700 transition-all"
+                  >
+                    زيارة الموقع المباشر
+                    <ExternalLink className="w-5 h-5" />
+                  </a>
+                )}
+              </div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
