@@ -25,7 +25,10 @@ import {
   Save,
   Info,
   CheckCircle2,
-  Upload
+  Upload,
+  Lock,
+  LogIn,
+  LogOut
 } from 'lucide-react';
 
 const Tooltip = ({ text }: { text: string }) => (
@@ -71,6 +74,9 @@ export default function Portfolio() {
   const [showControlPanel, setShowControlPanel] = useState(false);
   const [activeTab, setActiveTab] = useState('general');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [loginError, setLoginError] = useState('');
   
   const [profile, setProfile] = useState({
     name: 'محمود حبيب',
@@ -134,6 +140,21 @@ export default function Portfolio() {
     }, 800);
   };
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loginForm.email === 'n.ahmed40000000000@gmail.com' && loginForm.password === 'mahmoud1234') {
+      setIsLoggedIn(true);
+      setLoginError('');
+    } else {
+      setLoginError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setLoginForm({ email: '', password: '' });
+  };
+
   if (!mounted) return null;
 
   return (
@@ -147,7 +168,7 @@ export default function Portfolio() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-2"
           >
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/20">
+            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/20">
               {profile.name.charAt(0)}
             </div>
             <span className="text-lg font-bold tracking-tight hidden sm:block">
@@ -157,8 +178,8 @@ export default function Portfolio() {
           
           <div className="flex items-center gap-6">
             <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-500 dark:text-zinc-400">
-              <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">الرئيسية</a>
-              <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">أعمالي</a>
+              <a href="#home" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">الرئيسية</a>
+              <a href="#projects" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">أعمالي</a>
             </div>
             <div className="h-6 w-px bg-zinc-200 dark:bg-zinc-800 hidden md:block" />
             <button 
@@ -180,7 +201,7 @@ export default function Portfolio() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-44 pb-32 px-6 overflow-hidden">
+      <section id="home" className="relative pt-44 pb-32 px-6 overflow-hidden">
         <div className="max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -194,7 +215,7 @@ export default function Portfolio() {
             
             <h1 className="text-6xl md:text-8xl font-bold mb-8 tracking-tight leading-[1.1]">
               نصمم مستقبلك <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%_auto] animate-gradient">الرقمي باحترافية</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 bg-[length:200%_auto] animate-gradient">الرقمي باحترافية</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-3xl mb-12 leading-relaxed mx-auto">
@@ -208,13 +229,14 @@ export default function Portfolio() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-10 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow-2xl shadow-indigo-500/30 transition-all flex items-center justify-center gap-3 text-lg"
+                className="px-10 py-5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold shadow-2xl shadow-blue-500/30 transition-all flex items-center justify-center gap-3 text-lg"
               >
                 {profile.contactText}
                 <ArrowUpRight className="w-5 h-5" />
               </motion.a>
               
               <motion.button
+                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="px-10 py-5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl font-bold shadow-xl shadow-zinc-200/50 dark:shadow-none transition-all flex items-center justify-center gap-3 text-lg"
@@ -237,25 +259,25 @@ export default function Portfolio() {
               transition={{ repeat: Infinity, duration: 2 }}
               className="w-6 h-10 border-2 border-zinc-200 dark:border-zinc-800 rounded-full flex justify-center p-1"
             >
-              <div className="w-1 h-2 bg-indigo-600 rounded-full" />
+              <div className="w-1 h-2 bg-blue-600 rounded-full" />
             </motion.div>
           </motion.div>
         </div>
 
         {/* Professional Background Elements */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-violet-500/10 rounded-full blur-[120px]" />
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/10 rounded-full blur-[120px]" />
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150 pointer-events-none" />
         </div>
       </section>
 
       {/* Projects Section */}
-      <section className="py-24 px-6">
+      <section id="projects" className="py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">أعمالي المختارة</h2>
-            <div className="w-20 h-1.5 bg-indigo-600 mx-auto rounded-full" />
+            <div className="w-20 h-1.5 bg-blue-600 mx-auto rounded-full" />
             <p className="mt-6 text-zinc-600 dark:text-zinc-400 max-w-xl mx-auto">
               مجموعة من المشاريع التي قمت بتطويرها مؤخراً، تعكس شغفي بالجودة والابتكار.
             </p>
@@ -299,7 +321,7 @@ export default function Portfolio() {
                       </span>
                     ))}
                   </div>
-                  <h3 className="text-xl font-bold mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {project.title}
                   </h3>
                   <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
@@ -320,9 +342,9 @@ export default function Portfolio() {
           </div>
           
           <div className="flex gap-6">
-            <a href="#" className="text-zinc-400 hover:text-indigo-600 transition-colors"><Github className="w-6 h-6" /></a>
-            <a href="#" className="text-zinc-400 hover:text-indigo-600 transition-colors"><Twitter className="w-6 h-6" /></a>
-            <a href="#" className="text-zinc-400 hover:text-indigo-600 transition-colors"><Linkedin className="w-6 h-6" /></a>
+            <a href="#" className="text-zinc-400 hover:text-blue-600 transition-colors"><Github className="w-6 h-6" /></a>
+            <a href="#" className="text-zinc-400 hover:text-blue-600 transition-colors"><Twitter className="w-6 h-6" /></a>
+            <a href="#" className="text-zinc-400 hover:text-blue-600 transition-colors"><Linkedin className="w-6 h-6" /></a>
           </div>
         </div>
       </footer>
@@ -348,249 +370,319 @@ export default function Portfolio() {
               {/* Header */}
               <div className="flex justify-between items-center p-6 border-b border-zinc-200 dark:border-zinc-800">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-indigo-600 rounded-lg text-white">
-                    <Settings className="w-5 h-5" />
+                  <div className="p-2 bg-blue-600 rounded-lg text-white">
+                    {isLoggedIn ? <Settings className="w-5 h-5" /> : <Lock className="w-5 h-5" />}
                   </div>
-                  <h2 className="text-xl font-bold">إدارة الموقع</h2>
+                  <h2 className="text-xl font-bold">{isLoggedIn ? 'إدارة الموقع' : 'تسجيل الدخول'}</h2>
                 </div>
-                <button 
-                  onClick={() => setShowControlPanel(false)}
-                  className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors"
-                >
-                  <X className="w-6 h-6" />
-                </button>
+                <div className="flex items-center gap-2">
+                  {isLoggedIn && (
+                    <button 
+                      onClick={handleLogout}
+                      className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors text-zinc-500"
+                      title="تسجيل الخروج"
+                    >
+                      <LogOut className="w-5 h-5" />
+                    </button>
+                  )}
+                  <button 
+                    onClick={() => setShowControlPanel(false)}
+                    className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-full transition-colors"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
 
-              {/* Tabs */}
-              <div className="flex border-b border-zinc-200 dark:border-zinc-800">
-                <button 
-                  onClick={() => setActiveTab('general')}
-                  className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'general' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-zinc-400'}`}
-                >
-                  الإعدادات العامة
-                </button>
-                <button 
-                  onClick={() => setActiveTab('projects')}
-                  className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'projects' ? 'border-indigo-600 text-indigo-600' : 'border-transparent text-zinc-400'}`}
-                >
-                  إدارة الأعمال
-                </button>
-              </div>
+              {!isLoggedIn ? (
+                <div className="flex-1 flex flex-col items-center justify-center p-8">
+                  <div className="w-full max-w-sm space-y-8">
+                    <div className="text-center space-y-2">
+                      <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <Lock className="w-8 h-8" />
+                      </div>
+                      <h3 className="text-2xl font-bold">منطقة محمية</h3>
+                      <p className="text-zinc-500 dark:text-zinc-400 text-sm">يرجى إدخال بيانات الاعتماد للوصول إلى لوحة التحكم</p>
+                    </div>
 
-              {/* Content */}
-              <div className="flex-1 overflow-y-auto p-6">
-                {activeTab === 'general' ? (
-                  <div className="space-y-6">
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <label className="text-xs font-bold text-zinc-500 uppercase">الاسم الشخصي</label>
-                        <Tooltip text="الاسم الذي سيظهر في أعلى الموقع وفي قسم الترحيب." />
-                      </div>
-                      <input 
-                        type="text" 
-                        value={profile.name}
-                        onChange={(e) => setProfile({...profile, name: e.target.value})}
-                        className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <label className="text-xs font-bold text-zinc-500 uppercase">العلامة التجارية</label>
-                        <Tooltip text="وصف قصير لعملك يظهر تحت اسمك في قسم الترحيب." />
-                      </div>
-                      <input 
-                        type="text" 
-                        value={profile.brand}
-                        onChange={(e) => setProfile({...profile, brand: e.target.value})}
-                        className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center">
-                        <label className="text-xs font-bold text-zinc-500 uppercase">رابط واتساب</label>
-                        <Tooltip text="الرابط الذي سيتم توجيه المستخدم إليه عند الضغط على زر التواصل." />
-                      </div>
-                      <input 
-                        type="text" 
-                        value={profile.whatsappLink}
-                        onChange={(e) => setProfile({...profile, whatsappLink: e.target.value})}
-                        className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-8">
-                    {/* Add/Edit Project */}
-                    <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800">
-                      <h3 className="font-bold mb-4 flex items-center gap-2">
-                        {editingProject ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-                        {editingProject ? 'تعديل المشروع' : 'إضافة مشروع جديد'}
-                        <Tooltip text={editingProject ? "قم بتعديل بيانات المشروع المختار." : "أضف مشروعاً جديداً لمعرض أعمالك."} />
-                      </h3>
-                      <div className="grid gap-4">
+                    <form onSubmit={handleLogin} className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 uppercase">البريد الإلكتروني</label>
                         <input 
-                          type="text" 
-                          placeholder="عنوان المشروع"
-                          value={editingProject ? editingProject.title : newProject.title}
-                          onChange={(e) => editingProject ? setEditingProject({...editingProject, title: e.target.value}) : setNewProject({...newProject, title: e.target.value})}
-                          className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm"
+                          type="email" 
+                          required
+                          value={loginForm.email}
+                          onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
+                          className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                          placeholder="example@gmail.com"
                         />
-                        <textarea 
-                          placeholder="وصف المشروع"
-                          value={editingProject ? editingProject.description : newProject.description}
-                          onChange={(e) => editingProject ? setEditingProject({...editingProject, description: e.target.value}) : setNewProject({...newProject, description: e.target.value})}
-                          className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm h-20"
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-zinc-500 uppercase">كلمة المرور</label>
+                        <input 
+                          type="password" 
+                          required
+                          value={loginForm.password}
+                          onChange={(e) => setLoginForm({...loginForm, password: e.target.value})}
+                          className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                          placeholder="••••••••"
                         />
-                        
-                        <div className="space-y-2">
-                          <label className="text-[10px] font-bold text-zinc-500 uppercase flex items-center gap-1">
-                            صورة المشروع
-                            <Tooltip text="يمكنك رفع صورة من جهازك أو سحبها هنا." />
-                          </label>
-                          <div 
-                            className="relative group h-32 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden hover:border-indigo-500 transition-colors flex flex-col items-center justify-center gap-2 bg-white dark:bg-zinc-950 cursor-pointer"
-                            onClick={() => document.getElementById('project-image-upload')?.click()}
-                          >
-                            {(editingProject ? editingProject.image : newProject.image) ? (
-                              <>
-                                <Image 
-                                  src={editingProject ? editingProject.image : newProject.image} 
-                                  alt="Preview" 
-                                  fill 
-                                  className="object-cover opacity-40 group-hover:opacity-20 transition-opacity" 
-                                />
-                                <div className="relative z-10 flex flex-col items-center gap-1">
-                                  <Upload className="w-6 h-6 text-indigo-600" />
-                                  <span className="text-[10px] font-bold">تغيير الصورة</span>
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <Upload className="w-8 h-8 text-zinc-400 group-hover:text-indigo-600 transition-colors" />
-                                <span className="text-[10px] font-bold text-zinc-500">اسحب الصورة هنا أو اضغط للرفع</span>
-                              </>
-                            )}
-                            <input 
-                              id="project-image-upload"
-                              type="file" 
-                              accept="image/*"
-                              className="hidden"
-                              onChange={(e) => handleImageUpload(e, !!editingProject)}
-                            />
-                          </div>
-                        </div>
+                      </div>
 
-                        <div className="grid grid-cols-1 gap-4">
+                      {loginError && (
+                        <motion.p 
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="text-red-500 text-xs font-bold text-center"
+                        >
+                          {loginError}
+                        </motion.p>
+                      )}
+
+                      <button 
+                        type="submit"
+                        className="w-full py-4 bg-blue-600 text-white rounded-2xl font-bold shadow-lg shadow-blue-500/20 hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
+                      >
+                        دخول
+                        <LogIn className="w-5 h-5" />
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {/* Tabs */}
+                  <div className="flex border-b border-zinc-200 dark:border-zinc-800">
+                    <button 
+                      onClick={() => setActiveTab('general')}
+                      className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'general' ? 'border-blue-600 text-blue-600' : 'border-transparent text-zinc-400'}`}
+                    >
+                      الإعدادات العامة
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('projects')}
+                      className={`flex-1 py-4 text-sm font-bold transition-all border-b-2 ${activeTab === 'projects' ? 'border-blue-600 text-blue-600' : 'border-transparent text-zinc-400'}`}
+                    >
+                      إدارة الأعمال
+                    </button>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 overflow-y-auto p-6">
+                    {activeTab === 'general' ? (
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <div className="flex items-center">
+                            <label className="text-xs font-bold text-zinc-500 uppercase">الاسم الشخصي</label>
+                            <Tooltip text="الاسم الذي سيظهر في أعلى الموقع وفي قسم الترحيب." />
+                          </div>
                           <input 
                             type="text" 
-                            placeholder="الوسوم (مفصولة بفاصلة)"
-                            value={editingProject ? (Array.isArray(editingProject.tags) ? editingProject.tags.join(', ') : editingProject.tags) : newProject.tags}
-                            onChange={(e) => editingProject ? setEditingProject({...editingProject, tags: e.target.value}) : setNewProject({...newProject, tags: e.target.value})}
-                            className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm"
+                            value={profile.name}
+                            onChange={(e) => setProfile({...profile, name: e.target.value})}
+                            className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                           />
                         </div>
-                        <div className="flex gap-2">
-                          <button 
-                            onClick={() => {
-                              if (editingProject) {
-                                setProjects(projects.map(p => p.id === editingProject.id ? {
-                                  ...editingProject,
-                                  tags: typeof editingProject.tags === 'string' ? editingProject.tags.split(',').map((t: string) => t.trim()) : editingProject.tags
-                                } : p));
-                                setEditingProject(null);
-                              } else {
-                                if (!newProject.title) return;
-                                setProjects([...projects, {
-                                  ...newProject,
-                                  id: Date.now(),
-                                  tags: newProject.tags.split(',').map(t => t.trim())
-                                }]);
-                                setNewProject({ title: '', description: '', image: 'https://picsum.photos/seed/new/800/600', link: '#', tags: '' });
-                              }
-                            }}
-                            className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all"
-                          >
-                            {editingProject ? 'تحديث المشروع' : 'إضافة المشروع'}
-                          </button>
-                          {editingProject && (
-                            <button 
-                              onClick={() => setEditingProject(null)}
-                              className="px-6 py-3 bg-zinc-200 dark:bg-zinc-800 rounded-xl font-bold text-sm"
-                            >
-                              إلغاء
-                            </button>
-                          )}
+                        <div className="space-y-2">
+                          <div className="flex items-center">
+                            <label className="text-xs font-bold text-zinc-500 uppercase">العلامة التجارية</label>
+                            <Tooltip text="وصف قصير لعملك يظهر تحت اسمك في قسم الترحيب." />
+                          </div>
+                          <input 
+                            type="text" 
+                            value={profile.brand}
+                            onChange={(e) => setProfile({...profile, brand: e.target.value})}
+                            className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <div className="flex items-center">
+                            <label className="text-xs font-bold text-zinc-500 uppercase">رابط واتساب</label>
+                            <Tooltip text="الرابط الذي سيتم توجيه المستخدم إليه عند الضغط على زر التواصل." />
+                          </div>
+                          <input 
+                            type="text" 
+                            value={profile.whatsappLink}
+                            onChange={(e) => setProfile({...profile, whatsappLink: e.target.value})}
+                            className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                          />
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="space-y-8">
+                        {/* Add/Edit Project */}
+                        <div className="p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                          <h3 className="font-bold mb-4 flex items-center gap-2">
+                            {editingProject ? <Edit2 className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+                            {editingProject ? 'تعديل المشروع' : 'إضافة مشروع جديد'}
+                            <Tooltip text={editingProject ? "قم بتعديل بيانات المشروع المختار." : "أضف مشروعاً جديداً لمعرض أعمالك."} />
+                          </h3>
+                          <div className="grid gap-4">
+                            <input 
+                              type="text" 
+                              placeholder="عنوان المشروع"
+                              value={editingProject ? editingProject.title : newProject.title}
+                              onChange={(e) => editingProject ? setEditingProject({...editingProject, title: e.target.value}) : setNewProject({...newProject, title: e.target.value})}
+                              className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm"
+                            />
+                            <textarea 
+                              placeholder="وصف المشروع"
+                              value={editingProject ? editingProject.description : newProject.description}
+                              onChange={(e) => editingProject ? setEditingProject({...editingProject, description: e.target.value}) : setNewProject({...newProject, description: e.target.value})}
+                              className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm h-20"
+                            />
+                            
+                            <div className="space-y-2">
+                              <label className="text-[10px] font-bold text-zinc-500 uppercase flex items-center gap-1">
+                                صورة المشروع
+                                <Tooltip text="يمكنك رفع صورة من جهازك أو سحبها هنا." />
+                              </label>
+                              <div 
+                                className="relative group h-32 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden hover:border-blue-500 transition-colors flex flex-col items-center justify-center gap-2 bg-white dark:bg-zinc-950 cursor-pointer"
+                                onClick={() => document.getElementById('project-image-upload')?.click()}
+                              >
+                                {(editingProject ? editingProject.image : newProject.image) ? (
+                                  <>
+                                    <Image 
+                                      src={editingProject ? editingProject.image : newProject.image} 
+                                      alt="Preview" 
+                                      fill 
+                                      className="object-cover opacity-40 group-hover:opacity-20 transition-opacity" 
+                                    />
+                                    <div className="relative z-10 flex flex-col items-center gap-1">
+                                      <Upload className="w-6 h-6 text-blue-600" />
+                                      <span className="text-[10px] font-bold">تغيير الصورة</span>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Upload className="w-8 h-8 text-zinc-400 group-hover:text-blue-600 transition-colors" />
+                                    <span className="text-[10px] font-bold text-zinc-500">اسحب الصورة هنا أو اضغط للرفع</span>
+                                  </>
+                                )}
+                                <input 
+                                  id="project-image-upload"
+                                  type="file" 
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={(e) => handleImageUpload(e, !!editingProject)}
+                                />
+                              </div>
+                            </div>
 
-                    {/* Project List */}
-                    <div className="space-y-4">
-                      <h3 className="font-bold text-zinc-500 uppercase text-xs tracking-widest">المشاريع الحالية</h3>
-                      {projects.map((project) => (
-                        <div key={project.id} className="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl flex items-center justify-between gap-4">
-                          <div className="flex items-center gap-4 flex-1">
-                            <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                              <Image src={project.image} alt={project.title} fill className="object-cover" />
+                            <div className="grid grid-cols-1 gap-4">
+                              <input 
+                                type="text" 
+                                placeholder="الوسوم (مفصولة بفاصلة)"
+                                value={editingProject ? (Array.isArray(editingProject.tags) ? editingProject.tags.join(', ') : editingProject.tags) : newProject.tags}
+                                onChange={(e) => editingProject ? setEditingProject({...editingProject, tags: e.target.value}) : setNewProject({...newProject, tags: e.target.value})}
+                                className="w-full px-4 py-2 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg text-sm"
+                              />
                             </div>
-                            <div className="min-w-0">
-                              <h4 className="font-bold text-sm truncate">{project.title}</h4>
-                              <p className="text-xs text-zinc-500 truncate">{project.description}</p>
+                            <div className="flex gap-2">
+                              <button 
+                                onClick={() => {
+                                  if (editingProject) {
+                                    setProjects(projects.map(p => p.id === editingProject.id ? {
+                                      ...editingProject,
+                                      tags: typeof editingProject.tags === 'string' ? editingProject.tags.split(',').map((t: string) => t.trim()) : editingProject.tags
+                                    } : p));
+                                    setEditingProject(null);
+                                  } else {
+                                    if (!newProject.title) return;
+                                    setProjects([...projects, {
+                                      ...newProject,
+                                      id: Date.now(),
+                                      tags: newProject.tags.split(',').map(t => t.trim())
+                                    }]);
+                                    setNewProject({ title: '', description: '', image: 'https://picsum.photos/seed/new/800/600', link: '#', tags: '' });
+                                  }
+                                }}
+                                className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-all"
+                              >
+                                {editingProject ? 'تحديث المشروع' : 'إضافة المشروع'}
+                              </button>
+                              {editingProject && (
+                                <button 
+                                  onClick={() => setEditingProject(null)}
+                                  className="px-6 py-3 bg-zinc-200 dark:bg-zinc-800 rounded-xl font-bold text-sm"
+                                >
+                                  إلغاء
+                                </button>
+                              )}
                             </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <button 
-                              onClick={() => {
-                                setEditingProject(project);
-                              }}
-                              className="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-lg transition-all"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                            </button>
-                            <button 
-                              onClick={() => {
-                                setProjects(projects.filter(p => p.id !== project.id));
-                              }}
-                              className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
 
-              {/* Footer */}
-              <div className="p-6 border-t border-zinc-200 dark:border-zinc-800">
-                <button 
-                  onClick={handleSave}
-                  disabled={saveStatus !== 'idle'}
-                  className={`w-full py-4 rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 ${
-                    saveStatus === 'saved' 
-                      ? 'bg-emerald-500 text-white shadow-emerald-500/20' 
-                      : 'bg-indigo-600 text-white shadow-indigo-500/20 hover:bg-indigo-700'
-                  }`}
-                >
-                  {saveStatus === 'idle' && (
-                    <>
-                      حفظ وإغلاق
-                      <Save className="w-5 h-5" />
-                    </>
-                  )}
-                  {saveStatus === 'saving' && (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  )}
-                  {saveStatus === 'saved' && (
-                    <>
-                      تم الحفظ بنجاح!
-                      <CheckCircle2 className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
-              </div>
+                        {/* Project List */}
+                        <div className="space-y-4">
+                          <h3 className="font-bold text-zinc-500 uppercase text-xs tracking-widest">المشاريع الحالية</h3>
+                          {projects.map((project) => (
+                            <div key={project.id} className="p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl flex items-center justify-between gap-4">
+                              <div className="flex items-center gap-4 flex-1">
+                                <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                                  <Image src={project.image} alt={project.title} fill className="object-cover" />
+                                </div>
+                                <div className="min-w-0">
+                                  <h4 className="font-bold text-sm truncate">{project.title}</h4>
+                                  <p className="text-xs text-zinc-500 truncate">{project.description}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <button 
+                                  onClick={() => {
+                                    setEditingProject(project);
+                                  }}
+                                  className="p-2 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-lg transition-all"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                </button>
+                                <button 
+                                  onClick={() => {
+                                    setProjects(projects.filter(p => p.id !== project.id));
+                                  }}
+                                  className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-all"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Footer */}
+                  <div className="p-6 border-t border-zinc-200 dark:border-zinc-800">
+                    <button 
+                      onClick={handleSave}
+                      disabled={saveStatus !== 'idle'}
+                      className={`w-full py-4 rounded-2xl font-bold shadow-lg transition-all flex items-center justify-center gap-2 ${
+                        saveStatus === 'saved' 
+                          ? 'bg-emerald-500 text-white shadow-emerald-500/20' 
+                          : 'bg-blue-600 text-white shadow-blue-500/20 hover:bg-blue-700'
+                      }`}
+                    >
+                      {saveStatus === 'idle' && (
+                        <>
+                          حفظ وإغلاق
+                          <Save className="w-5 h-5" />
+                        </>
+                      )}
+                      {saveStatus === 'saving' && (
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      )}
+                      {saveStatus === 'saved' && (
+                        <>
+                          تم الحفظ بنجاح!
+                          <CheckCircle2 className="w-5 h-5" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </>
+              )}
             </motion.div>
           </>
         )}
