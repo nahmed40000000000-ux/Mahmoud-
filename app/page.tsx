@@ -28,7 +28,8 @@ import {
   Upload,
   Lock,
   LogIn,
-  LogOut
+  LogOut,
+  FileDown
 } from 'lucide-react';
 
 const Tooltip = ({ text }: { text: string }) => (
@@ -85,7 +86,9 @@ export default function Portfolio() {
     contactText: 'تواصل معي',
     viewWorkText: 'رؤية أعمالي',
     whatsappLink: 'https://wa.me/201234567890',
-    avatar: 'https://picsum.photos/seed/avatar/400/400'
+    avatar: 'https://picsum.photos/seed/avatar/400/400',
+    resumeUrl: '',
+    resumeText: 'تحميل السيرة الذاتية'
   });
 
   const [projects, setProjects] = useState(initialProjects);
@@ -248,6 +251,20 @@ export default function Portfolio() {
                   {profile.viewWorkText}
                   <ExternalLink className="w-5 h-5" />
                 </motion.button>
+
+                {profile.resumeUrl && (
+                  <motion.a
+                    href={profile.resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="px-10 py-5 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-3 text-lg"
+                  >
+                    {profile.resumeText}
+                    <FileDown className="w-5 h-5" />
+                  </motion.a>
+                )}
               </div>
             </motion.div>
 
@@ -541,6 +558,34 @@ export default function Portfolio() {
                             onChange={(e) => setProfile({...profile, whatsappLink: e.target.value})}
                             className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
                           />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <div className="flex items-center">
+                              <label className="text-xs font-bold text-zinc-500 uppercase">رابط السيرة الذاتية (PDF)</label>
+                              <Tooltip text="رابط ملف السيرة الذاتية الخاص بك (Google Drive, Dropbox, إلخ)." />
+                            </div>
+                            <input 
+                              type="text" 
+                              placeholder="https://..."
+                              value={profile.resumeUrl}
+                              onChange={(e) => setProfile({...profile, resumeUrl: e.target.value})}
+                              className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <div className="flex items-center">
+                              <label className="text-xs font-bold text-zinc-500 uppercase">نص زر التحميل</label>
+                              <Tooltip text="النص الذي يظهر على زر تحميل السيرة الذاتية." />
+                            </div>
+                            <input 
+                              type="text" 
+                              value={profile.resumeText}
+                              onChange={(e) => setProfile({...profile, resumeText: e.target.value})}
+                              className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
                         </div>
 
                         <div className="space-y-2">
